@@ -29,6 +29,7 @@ def display_options():
         "\nUpdate "
     )
 
+
 def main():
 
     categories = (
@@ -48,6 +49,55 @@ def main():
     }
 
     usr_data = project_classes.Salary(*user_data.values())
+
+    # ideas: graphics lib
+
+    """
+    main window
+    
+        0: Add new expense
+        1: Delete expense
+        2: Update current expenses / earnings
+        3: Show stats
+    
+    /add new expense
+    
+        input("New expense name")
+        int(input("New expense amount"))
+        
+        dict_[new_expense_name] = new_expense_amount
+    
+    /delete expense
+    
+        input("Which expense to delete")
+        
+        try:
+            dict_["expense"]
+        except KeyError as e: print("This expense does not exist.")
+    
+    /update current expenses
+    
+        a = [x for x in range(0, len(list(dict_.keys())))]
+        
+        for each in a:
+            f"{each}: {list(dict_.keys()))[each]}"
+            
+            0: Salary
+            1: Rent
+            2: Fuel
+            3: Food
+            4: Saving Target
+            
+        int(input("Choice")
+        int(input("New amount")
+        
+        list(dict_.keys())[choice] = new_amount
+    
+    /show stats
+    
+        print relevant statistics, in user-defined ranges, for expenses, earnings and savings.
+    
+    """
 
     while True:
         ...

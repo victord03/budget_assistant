@@ -21,4 +21,5 @@ class Salary:
         return self.amount - (self.rent + self.fuel + self.food + self.saving_target)
 
     def display_yearly_net_profit(self) -> int:
+        # todo: calculates 14 month yearly salary cycle
         return self.infer_net_profit() * 14
