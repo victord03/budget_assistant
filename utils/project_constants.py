@@ -1,2 +1,2 @@
 NEW_LINE = "\n"
-INPUT_DECO = "> "
+INPUT_DECO = f"{NEW_LINE}> "

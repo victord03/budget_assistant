@@ -4,6 +4,8 @@ from ui.project_ui import get_user_input_as_integer, get_user_input_as_string
 class BudgetTracker:
     data: dict
 
+    # todo: instead of monthly, just log any new expense + the date
+
     def __init__(self) -> None:
 
         self.data = {}
@@ -19,8 +21,7 @@ class BudgetTracker:
 
     def add_new_expense(self) -> None:
 
-        print("\nEnter new expense name:")
-        new_expense_name = get_user_input_as_string()
+        new_expense_name = get_user_input_as_string(display_text="\nEnter new expense name:")
 
         print("\nEnter new expense amount:")
         new_expense_amount = get_user_input_as_integer()
@@ -29,8 +30,7 @@ class BudgetTracker:
 
     def delete_expense(self) -> None:
 
-        print("\nEnter expense name to delete:")
-        to_delete = get_user_input_as_string()
+        to_delete = get_user_input_as_string(display_text="\nEnter expense name to delete:")
 
         try:
             self.data.pop(to_delete)
@@ -61,3 +61,4 @@ class BudgetTracker:
             print(
                 f"{key.title()}: {value:,}"
             )
+
