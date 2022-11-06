@@ -1,4 +1,5 @@
 from ui.project_ui import get_user_input_as_integer, get_user_input_as_string
+import datetime as dt
 
 
 class BudgetTracker:
@@ -10,14 +11,14 @@ class BudgetTracker:
 
         self.data = {}
 
-        print("\nEnter your salary (monthly):")
+        """print("\nEnter your salary (monthly):")
         amount = get_user_input_as_integer()
 
         print("\nEnter your rent expense (monthly):")
         rent = get_user_input_as_integer()
 
         self.data["salary"] = amount
-        self.data["rent"] = rent
+        self.data["rent"] = rent"""
 
     def add_new_expense(self) -> None:
 
@@ -26,8 +27,14 @@ class BudgetTracker:
         print("\nEnter new expense amount:")
         new_expense_amount = get_user_input_as_integer()
 
-        self.data[new_expense_name] = new_expense_amount
+        now = str(dt.datetime.now())
 
+        if self.data.get(new_expense_name) is None:
+            self.data[now] = {new_expense_name: new_expense_amount}
+        else:
+            self.data[now][new_expense_name] += new_expense_amount
+
+    # todo: needs reworking since the key will be datetime.datetime.now()
     def delete_expense(self) -> None:
 
         to_delete = get_user_input_as_string(display_text="\nEnter expense name to delete:")
@@ -37,6 +44,7 @@ class BudgetTracker:
         except KeyError as e:
             print("Expense name does not exist in the data.")
 
+    # todo: functionality needs to be tested after update
     def update_current_expenses(self) -> None:
 
         number_of_keys = [x for x in range(0, len(list(self.data.keys())))]
@@ -59,6 +67,6 @@ class BudgetTracker:
 
         for key, value in self.data.items():
             print(
-                f"{key.title()}: {value:,}"
+                f"{key}: {value}"
             )
 

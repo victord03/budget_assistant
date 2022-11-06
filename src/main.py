@@ -26,6 +26,7 @@ def main():
             # todo: add graphs, for user-defined ranges (in months)
 
     my_budget_tracker.add_new_expense()
+    my_budget_tracker.show_data()
 
     path = r"C:\Users\3tr0001\Desktop\expenses.txt"
     save_to_hd.save_to_file(path, my_budget_tracker)

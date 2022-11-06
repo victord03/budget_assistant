@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 from classes.project_classes import BudgetTracker
 from ui.project_ui import get_user_input_as_string
 
@@ -8,11 +7,11 @@ def check_if_file_exists(path: str) -> str:
 
     while os.path.exists(path):
 
-        with open(path) as f:
+        """with open(path) as f:
             content = f.readlines()
-            last_date = content[0]  # first line has to be the date
+            last_date = content[0]  # first line has to be the date"""
 
-        print(f"File already exists. File date: {last_date}. Overwrite ?")
+        print(f"File already exists. Overwrite ?")
 
         choice = get_user_input_as_string()
 
@@ -30,7 +29,8 @@ def format_data_to_string(data: BudgetTracker) -> str:
     string = ""
 
     for key, value in data.data.items():
-        string += f"\n{key.title()}: {value:,}"
+        for inner_key, inner_value in value.items():
+            string += f"\n{key},{inner_key},{inner_value}"
 
     return string
 
@@ -39,7 +39,8 @@ def save_to_file(path: str, data: BudgetTracker):
 
     path = check_if_file_exists(path)
     data_as_string = format_data_to_string(data)
-    date_today = str(datetime.now().date())
+    header = "date,expense,amount"
+    # date_today = str(datetime.now().date())
 
     with open(path, "w") as f:
-        f.write(date_today + data_as_string)
+        f.write(header + data_as_string)
