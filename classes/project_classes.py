@@ -24,6 +24,7 @@ class BudgetTracker:
         else:
             self.data[now][new_expense_name] += new_expense_amount
 
+    # todo: add graphs, for user-defined ranges (months, days, etc)
     def show_data(self, add_index=False) -> None:
 
         print()

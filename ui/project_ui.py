@@ -15,6 +15,7 @@ def display_options():
     b = f"{NEW_LINE}1: Delete an expense"
     c = f"{NEW_LINE}2: Update an expense"
     d = f"{NEW_LINE}3: Show current stats"
+    e = f"{NEW_LINE}4: Save current to file"
 
-    return a + b + c + d
+    return a + b + c + d + e
 
