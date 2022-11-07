@@ -11,7 +11,7 @@ def check_if_file_exists(path: str) -> str:
             content = f.readlines()
             last_date = content[0]  # first line has to be the date"""
 
-        print(f"File already exists. Overwrite ?")
+        print(f"Attempting to save as {path}, but the file already exists. Overwrite ?")
 
         choice = get_user_input_as_string()
 
@@ -40,7 +40,6 @@ def save_to_file(path: str, data: BudgetTracker):
     path = check_if_file_exists(path)
     data_as_string = format_data_to_string(data)
     header = "date,expense,amount"
-    # date_today = str(datetime.now().date())
 
     with open(path, "w") as f:
         f.write(header + data_as_string)

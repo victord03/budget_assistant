@@ -1,72 +1,70 @@
-from ui.project_ui import get_user_input_as_integer, get_user_input_as_string
+from ui.project_ui import get_user_input_as_float, get_user_input_as_string
 import datetime as dt
 
 
 class BudgetTracker:
     data: dict
 
-    # todo: instead of monthly, just log any new expense + the date
-
     def __init__(self) -> None:
+        self.data = dict()
 
-        self.data = {}
-
-        """print("\nEnter your salary (monthly):")
-        amount = get_user_input_as_integer()
-
-        print("\nEnter your rent expense (monthly):")
-        rent = get_user_input_as_integer()
-
-        self.data["salary"] = amount
-        self.data["rent"] = rent"""
-
+    # todo: need to add a new parameter for loading (eg. load_date_from_csv=False)
     def add_new_expense(self) -> None:
 
         new_expense_name = get_user_input_as_string(display_text="\nEnter new expense name:")
 
         print("\nEnter new expense amount:")
-        new_expense_amount = get_user_input_as_integer()
+        new_expense_amount = get_user_input_as_float()
 
-        now = str(dt.datetime.now())
+        now = str(dt.datetime.now())[0:21]
 
         if self.data.get(new_expense_name) is None:
+            new_expense_name = new_expense_name.title()
             self.data[now] = {new_expense_name: new_expense_amount}
         else:
             self.data[now][new_expense_name] += new_expense_amount
 
-    # todo: needs reworking since the key will be datetime.datetime.now()
-    def delete_expense(self) -> None:
-
-        to_delete = get_user_input_as_string(display_text="\nEnter expense name to delete:")
-
-        try:
-            self.data.pop(to_delete)
-        except KeyError as e:
-            print("Expense name does not exist in the data.")
-
-    # todo: functionality needs to be tested after update
-    def update_current_expenses(self) -> None:
-
-        number_of_keys = [x for x in range(0, len(list(self.data.keys())))]
-
-        print()
-        for each in number_of_keys:
-            print(f"{each}: {list(self.data.keys())[each].title()}")
-
-        print("\nEnter category number:")
-        choice = get_user_input_as_integer()
-
-        print("\nEnter new value:")
-        new_amount = get_user_input_as_integer()
-
-        self.data[list(self.data.keys())[choice]] = new_amount
-
-    def show_data(self) -> None:
+    def show_data(self, add_index=False) -> None:
 
         print()
 
-        for key, value in self.data.items():
-            print(
-                f"{key}: {value}"
-            )
+        for index, (key, value) in enumerate(self.data.items()):
+
+            for inner_key, inner_value in value.items():
+
+                if add_index:
+                    print(
+                        f"[{index}] ({key}): [{inner_key} - {inner_value}]"
+                    )
+                else:
+                    print(
+                        f"({key}): [{inner_key} - {inner_value}]"
+                    )
+
+    # todo: fix incomprehensible looping in the future (self.data[list(self.data.keys()[-])])
+    def update_expense(self, delete_instead=False) -> None:
+
+        print("\nSelect which value to modify using its corresponding index.")
+        self.show_data(add_index=True)
+
+        choice = int(get_user_input_as_string())
+
+        if delete_instead:
+            new_value = None
+        else:
+            new_value = get_user_input_as_float(display_text="\nEnter new value:")
+
+        dict_keys = self.data.keys()
+        list_of_keys = list(dict_keys)
+        key_selected_by_user = list_of_keys[choice]
+
+        if delete_instead:
+            input(f"\nConfirm deletion of key '{key_selected_by_user}' by pressing enter.")
+            self.data.pop(key_selected_by_user)
+        else:
+            inner_dict = self.data[key_selected_by_user]
+            inner_dict_list_of_keys = list(inner_dict.keys())
+            inner_dict_at_selection_zero = inner_dict_list_of_keys[0]
+
+            inner_dict[inner_dict_at_selection_zero] = new_value
 
