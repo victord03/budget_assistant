@@ -1,35 +1,41 @@
-from ui.project_ui import get_user_input_as_float, get_user_input_as_string
+import ui.project_ui as ui
 import datetime as dt
 
 
 class BudgetTracker:
-    data: dict
+    expenses_data: dict
+
+    monthly_income: int
+    monthly_savings: int
+    recurring_expenses_data: dict
 
     def __init__(self) -> None:
-        self.data = dict()
+        self.expenses_data = dict()
+        self.monthly_income = int()
+        self.monthly_savings = int()
+        self.recurring_expenses_data = dict()
 
     # todo: need to add a new parameter for loading (eg. load_date_from_csv=False)
+    # todo: add a "to_data: dict" as parameter to this function to use it for both dicts ?
     def add_new_expense(self) -> None:
 
-        new_expense_name = get_user_input_as_string(display_text="\nEnter new expense name:")
-
-        print("\nEnter new expense amount:")
-        new_expense_amount = get_user_input_as_float()
+        new_expense_name = ui.get_new_expense_name()
+        new_expense_amount = ui.get_new_expense_amount()
 
         now = str(dt.datetime.now())[0:21]
 
-        if self.data.get(new_expense_name) is None:
+        if self.expenses_data.get(new_expense_name) is None:
             new_expense_name = new_expense_name.title()
-            self.data[now] = {new_expense_name: new_expense_amount}
+            self.expenses_data[now] = {new_expense_name: new_expense_amount}
         else:
-            self.data[now][new_expense_name] += new_expense_amount
+            self.expenses_data[now][new_expense_name] += new_expense_amount
 
     # todo: add graphs, for user-defined ranges (months, days, etc)
     def show_data(self, add_index=False) -> None:
 
         print()
 
-        for index, (key, value) in enumerate(self.data.items()):
+        for index, (key, value) in enumerate(self.expenses_data.items()):
 
             for inner_key, inner_value in value.items():
 
@@ -45,27 +51,56 @@ class BudgetTracker:
     # todo: fix incomprehensible looping in the future (self.data[list(self.data.keys()[-])])
     def update_expense(self, delete_instead=False) -> None:
 
-        print("\nSelect which value to modify using its corresponding index.")
+        ui.display_update_expense_intro_message()
         self.show_data(add_index=True)
 
-        choice = int(get_user_input_as_string())
+        choice = int(ui.get_user_input_as_string())
 
         if delete_instead:
             new_value = None
         else:
-            new_value = get_user_input_as_float(display_text="\nEnter new value:")
+            new_value = ui.get_new_value()
 
-        dict_keys = self.data.keys()
+        dict_keys = self.expenses_data.keys()
         list_of_keys = list(dict_keys)
         key_selected_by_user = list_of_keys[choice]
 
         if delete_instead:
-            input(f"\nConfirm deletion of key '{key_selected_by_user}' by pressing enter.")
-            self.data.pop(key_selected_by_user)
+            ui.display_deletion_key_warning(key_selected_by_user)
+            self.expenses_data.pop(key_selected_by_user)
         else:
-            inner_dict = self.data[key_selected_by_user]
+            inner_dict = self.expenses_data[key_selected_by_user]
             inner_dict_list_of_keys = list(inner_dict.keys())
             inner_dict_at_selection_zero = inner_dict_list_of_keys[0]
 
             inner_dict[inner_dict_at_selection_zero] = new_value
+
+    def add_monthly_income(self):
+
+        income = ui.get_income()
+        self.monthly_income = income
+
+    def set_monthly_savings_target(self):
+
+        savings = ui.get_monthly_savings()
+        self.monthly_savings = savings
+
+    def calculate_maximum_spending_to_next_payment(self) -> float:
+
+        next_payment = ui.get_next_payment()
+        current_amount = ui.get_current_amount()
+
+        if self.monthly_savings == 0:
+            choice = ui.display_no_savings_warning_message()
+
+            if "n" in choice.lower():
+
+                while self.monthly_savings == 0:
+                    self.set_monthly_savings_target()
+
+                    if current_amount - self.monthly_savings <= 0:
+                        ui.display_warning_high_savings()
+                        self.monthly_savings = 0
+
+        return round((current_amount - self.monthly_savings) / next_payment, 2)
 

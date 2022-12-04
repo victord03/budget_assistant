@@ -1,5 +1,5 @@
+import ui.project_ui as ui
 from classes.project_classes import BudgetTracker
-from ui.project_ui import display_options, get_user_input_as_string
 from utils import save_to_hd
 
 
@@ -10,7 +10,7 @@ def main():
 
     test_data = True
     if test_data:
-        my_budget_tracker.data.update(
+        my_budget_tracker.expenses_data.update(
             {
                 "2022-11-05 09:42:09.0": {"Food": 6.00},
                 "2022-11-06 04:55:56.9": {"Batteries (AA)": 3.30},
@@ -19,12 +19,15 @@ def main():
             }
         )
 
-    loop = True
+    result = my_budget_tracker.calculate_maximum_spending_to_next_payment()
+    ui.display_calculated_spending_to_next_payment(result)
+
+    loop = False
     if loop:
 
         while True:
-            print(display_options())
-            choice = get_user_input_as_string()
+            ui.display_options()
+            choice = ui.get_user_input_as_string()
 
             try:
                 choice_int = int(choice)
@@ -39,15 +42,15 @@ def main():
                 case 2:
                     my_budget_tracker.update_expense()
                 case 3:
-                    my_budget_tracker.show_data()
+                    ui.display_class_dict(my_budget_tracker.expenses_data)
                 case 4:
                     # todo: needs reworking
-                    return_code = save_to_hd.save_to_file(path, my_budget_tracker)
+                    return_code = save_to_hd.save_to_file(path, my_budget_tracker.expenses_data)
                     if not return_code:
-                        print("Loop return code 0 (save operation not completed).")
+                        ui.display_loop_return_code_0()
                         break
                     elif return_code:
-                        print("Loop return code 1 (save operation was completed).")
+                        ui.display_loop_return_code_1()
                         break
 
 
