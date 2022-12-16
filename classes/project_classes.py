@@ -102,5 +102,8 @@ class BudgetTracker:
                         ui.display_warning_high_savings()
                         self.monthly_savings = 0
 
+        if next_payment == 0:
+            next_payment = 1
+
         return round((current_amount - self.monthly_savings) / next_payment, 2)
 
