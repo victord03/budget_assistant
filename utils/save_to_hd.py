@@ -3,6 +3,11 @@ import ui.project_ui as ui
 
 
 def check_if_file_exists(path: str) -> str:
+    """Checks if the path chosen already exists.
+
+    If it does, it informs the user. The user can choose to overwrite or choose a new name.
+
+    In both cases, returns the final path that will be used."""
 
     while os.path.exists(path):
 
@@ -30,6 +35,8 @@ def check_if_file_exists(path: str) -> str:
 
 
 def format_data_to_string(data: dict) -> str:
+    """Formats each dict value from BudgetTracker.expenses_dict as a string in csv format to be exported in a text
+    file."""
 
     string = ""
 
@@ -41,6 +48,14 @@ def format_data_to_string(data: dict) -> str:
 
 
 def save_to_file(path: str, data: dict) -> bool:
+    """Attempts to save the data to the path given.
+
+    If the path exists and the user chooses to abort the operation, nothing happens.
+
+    Otherwise, the BudgetTracker.expenses_dict data is formatted in a csv format, and saved as a text file,
+    at the specified path.
+
+    Returns True or False depending on whether the operation succeeded or failed."""
 
     path = check_if_file_exists(path)
 

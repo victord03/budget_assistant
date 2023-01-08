@@ -4,6 +4,7 @@ from utils import save_to_hd
 
 
 def main():
+    """Main Func"""
 
     my_budget_tracker = BudgetTracker()
     path = r"C:\Users\3tr0001\Desktop\expenses.txt"
